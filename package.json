@@ -1,6 +1,6 @@
 {
   "name": "react-router-redux-provider",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "react-router-redux-provider",
   "main": "libs/index.js",
   "scripts": {
@@ -36,7 +36,9 @@
     "url": "https://github.com/dog-days/react-router-redux-provider/issues"
   },
   "homepage": "https://github.com/dog-days/react-router-redux-provider#readme",
-  "dependencies": {},
+  "dependencies": {
+    "react-router-redux": "^5.0.0-alpha.6"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "cross-env": "^5.0.4",
@@ -49,8 +51,6 @@
     "react-boilerplate-app-scripts": "^0.0.29",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
-    "react-router-dom": "^4.1.2",
-    "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2"
   },
   "peerDependencies": {
