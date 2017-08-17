@@ -3,6 +3,7 @@
 node_modules/
 build/
 /src/
+/demo/
 .DS_Store
 *.tgz
 *.swp
