@@ -18,6 +18,15 @@ function getStore() {
   }
   return store;
 }
+/**
+ * redux 基础 provider
+ * @prop { object } history browser、hash、memory，跟react-router挂钩，必填
+ * @prop { object } store redux store
+ *                  非必要的，如果有store，reducers、middlewares和enhancers就不生效，传进来也没有意义
+ * @prop { array } middlewares redux middlewares
+ * @prop { array } enhancers redux enhancers
+ * @prop { object } reducers redux reducers (传进来后会被combineReducers)
+ */
 export default class Provider extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -27,6 +36,16 @@ export default class Provider extends React.Component {
     enhancers: PropTypes.array,
     reducers: PropTypes.object,
   };
+  //begin--定义context
+  //static childContextTypes = {
+  //store: PropTypes.object
+  //};
+  //getChildContext() {
+  //return {
+  //store: this.store
+  //};
+  //}
+  //end--定义context
   displayName = 'Provider';
   state = {};
   store = getStore.bind(this)();

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { testAction } from './model';
 
@@ -8,6 +9,9 @@ import { testAction } from './model';
   };
 })
 export default class Test extends React.Component {
+  static contextTypes = {
+    store: PropTypes.object,
+  };
   showToggleEvent = e => {
     const { dispatch, display } = this.props;
     if (display) {
@@ -17,6 +21,8 @@ export default class Test extends React.Component {
     }
   };
   render() {
+    //react-redux provider提供了context，可以直接用store
+    //console.log(this.context.store)
     const { display } = this.props;
     return (
       <div>
