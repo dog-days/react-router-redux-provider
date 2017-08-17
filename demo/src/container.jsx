@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryProvider as Provider } from 'react-router-redux-provider';
+import { BrowserProvider as Provider } from 'react-router-redux-provider';
 import Test from './test';
 import { test } from './model';
 

@@ -1,65 +1,77 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider as ReduxProvider } from 'react-redux';
 import {
   ConnectedRouter,
   routerReducer,
   routerMiddleware,
 } from 'react-router-redux';
+import window from 'global/window';
 
+function getStore() {
+  let { store, preloadedState } = this.props;
+  if (!store) {
+    const reducers = this.getReducers(this.props);
+    const enhancers = this.getEnhancers(this.props);
+    store = createStore(reducers, preloadedState, enhancers);
+  }
+  return store;
+}
 export default class Provider extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
-    //非必要的，如果有store，reducers就不生效，传进来也没有意义
+    //非必要的，如果有store，reducers、middlewares和enhancers就不生效，传进来也没有意义
     store: PropTypes.object,
-    middleware: PropTypes.array,
+    middlewares: PropTypes.array,
+    enhancers: PropTypes.array,
     reducers: PropTypes.object,
   };
   displayName = 'Provider';
   state = {};
-  componentDidMount() {
-    const { store, reducers = {}, middleware = [], history } = this.props;
-    if (store) {
-      this.store = store;
-    } else {
-      this.store = createStore(
-        combineReducers({
-          ...reducers,
-          router: routerReducer,
-        }),
-        applyMiddleware(routerMiddleware(history), ...middleware)
-      );
+  store = getStore.bind(this)();
+  getReducers(props) {
+    const { reducers } = props;
+    return combineReducers({
+      ...reducers,
+      router: routerReducer,
+    });
+  }
+  getEnhancers(props) {
+    let devtools = () => noop => noop;
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      window.__REDUX_DEVTOOLS_EXTENSION__
+    ) {
+      devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
     }
-    this.setState({ canRender: true });
+    const { enhancers = [], middlewares = [], history } = props;
+    const _middlewares = [...middlewares, routerMiddleware(history)];
+    const _enhancers = [
+      applyMiddleware(..._middlewares),
+      devtools(),
+      ...enhancers,
+    ];
+    return compose(..._enhancers);
   }
   componentWillReceiveProps(nextProps) {
-    const { store, reducers = {}, hot } = nextProps;
+    const { store, hot } = nextProps;
     //热替换处理，根据props.hot来处理
     if (!store && hot) {
-      this.store.replaceReducer(
-        combineReducers({
-          ...reducers,
-          router: routerReducer,
-        })
-      );
+      const reducers = this.getReducers(nextProps);
+      this.store.replaceReducer(reducers);
     }
   }
   render() {
-    const { canRender } = this.state;
-    if (!canRender) {
-      return false;
-    } else {
-      const { history, children } = this.props;
-      return (
-        <ReduxProvider store={this.store}>
-          <ConnectedRouter history={history}>
-            <span>
-              {children}
-            </span>
-          </ConnectedRouter>
-        </ReduxProvider>
-      );
-    }
+    const { history, children } = this.props;
+    return (
+      <ReduxProvider store={this.store}>
+        <ConnectedRouter history={history}>
+          <span>
+            {children}
+          </span>
+        </ConnectedRouter>
+      </ReduxProvider>
+    );
   }
 }
