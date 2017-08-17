@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserProvider as Provider } from 'react-router-redux-provider';
+import { Route, Link } from 'react-router-dom';
 import Test from './test';
 import { test } from './model';
 
@@ -14,6 +15,21 @@ export default function container(props) {
         test: test,
       }}
     >
+      <Link to="/index">主页</Link>
+      <br />
+      <Link to="/about">关于</Link>
+      <Route
+        path="/about"
+        component={props => {
+          return <div>about</div>;
+        }}
+      />
+      <Route
+        path="/index"
+        component={props => {
+          return <div>index</div>;
+        }}
+      />
       {
         //hot是随机数，是为了让react-redux可以渲染，现在的react-redux版本做了props对比，没变化就不渲染了
       }
