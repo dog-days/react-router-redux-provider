@@ -15,19 +15,20 @@ export default function container(props) {
         test: test,
       }}
     >
-      <Link to="/index">主页</Link>
+      <Link to="/">主页</Link>
       <br />
       <Link to="/about">关于</Link>
+      <Route
+        exact
+        path="/"
+        component={props => {
+          return <div>index</div>;
+        }}
+      />
       <Route
         path="/about"
         component={props => {
           return <div>about</div>;
-        }}
-      />
-      <Route
-        path="/index"
-        component={props => {
-          return <div>index</div>;
         }}
       />
       {
