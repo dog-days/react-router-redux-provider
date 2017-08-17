@@ -6,9 +6,9 @@ export default class MemoryProvider extends React.Component {
   displayName = 'MemoryProvider';
   history = createHistory();
   render() {
-    const { children, ...others } = this.props;
+    const { children, history = this.history, ...others } = this.props;
     return (
-      <Provider {...others} history={this.history}>
+      <Provider {...others} history={history}>
         {children}
       </Provider>
     );

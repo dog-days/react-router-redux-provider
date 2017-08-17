@@ -36,16 +36,6 @@ export default class Provider extends React.Component {
     enhancers: PropTypes.array,
     reducers: PropTypes.object,
   };
-  //begin--定义context
-  //static childContextTypes = {
-  //store: PropTypes.object
-  //};
-  //getChildContext() {
-  //return {
-  //store: this.store
-  //};
-  //}
-  //end--定义context
   displayName = 'Provider';
   state = {};
   store = getStore.bind(this)();
@@ -63,6 +53,9 @@ export default class Provider extends React.Component {
       window.__REDUX_DEVTOOLS_EXTENSION__
     ) {
       devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
+    } else {
+      console.log('You have not install the redux-devtools-extension.');
+      console.log('See https://github.com/zalmoxisus/redux-devtools-extension');
     }
     const { enhancers = [], middlewares = [], history } = props;
     const _middlewares = [...middlewares, routerMiddleware(history)];
