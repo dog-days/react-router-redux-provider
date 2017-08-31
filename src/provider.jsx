@@ -27,6 +27,7 @@ function getStore() {
  * @prop { array } enhancers redux enhancers
  * @prop { object } reducers redux reducers (传进来后会被combineReducers)
  * @prop { any } preloadedState redux preloadedState
+ * @prop { boolean } production 是否是生产环境
  */
 export default class Provider extends React.Component {
   static propTypes = {
@@ -37,6 +38,7 @@ export default class Provider extends React.Component {
     enhancers: PropTypes.array,
     preloadedState: PropTypes.any,
     reducers: PropTypes.object,
+    production: PropTypes.bool,
   };
   displayName = 'Provider';
   state = {};
@@ -49,17 +51,16 @@ export default class Provider extends React.Component {
     });
   }
   getEnhancers(props) {
+    const { enhancers = [], middlewares = [], history, production } = props;
     let devtools = () => noop => noop;
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      window.__REDUX_DEVTOOLS_EXTENSION__
-    ) {
+    if (!production && window.__REDUX_DEVTOOLS_EXTENSION__) {
       devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
     } else {
       console.log('You have not install the redux-devtools-extension.');
-      console.log('See https://github.com/zalmoxisus/redux-devtools-extension');
+      console.log(
+        'See https://github.com/zalmoxisus/redux-devtools-extension.'
+      );
     }
-    const { enhancers = [], middlewares = [], history } = props;
     const _middlewares = [...middlewares, routerMiddleware(history)];
     const _enhancers = [
       applyMiddleware(..._middlewares),

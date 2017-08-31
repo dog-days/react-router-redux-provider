@@ -14,6 +14,7 @@ export default function container(props) {
       reducers={{
         test: test,
       }}
+      production={process.env.NODE_ENV === 'production'}
     >
       <Link to="/">主页</Link>
       <br />
