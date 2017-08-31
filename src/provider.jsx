@@ -51,7 +51,12 @@ export default class Provider extends React.Component {
     });
   }
   getEnhancers(props) {
-    const { enhancers = [], middlewares = [], history, production } = props;
+    const {
+      enhancers = [],
+      middlewares = [],
+      history,
+      production = true,
+    } = props;
     let devtools = () => noop => noop;
     if (!production && window.__REDUX_DEVTOOLS_EXTENSION__) {
       devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
