@@ -61,7 +61,7 @@ export default class Provider extends React.Component {
     //如果localStorage.reduxTools=true，reduxTools强制打开。
     //给生产环境调试使用。
     if (
-      (!production || JSON.parse(localStorage.reduxDevTools)) &&
+      (!production || JSON.parse(localStorage.getItem('reduxDevTools'))) &&
       window.__REDUX_DEVTOOLS_EXTENSION__
     ) {
       devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
