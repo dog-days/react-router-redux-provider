@@ -58,7 +58,12 @@ export default class Provider extends React.Component {
       production = true,
     } = props;
     let devtools = () => noop => noop;
-    if (!production && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    //如果localStorage.reduxTools=true，reduxTools强制打开。
+    //给生产环境调试使用。
+    if (
+      (!production || JSON.parse(localStorage.reduxDevTools)) &&
+      window.__REDUX_DEVTOOLS_EXTENSION__
+    ) {
       devtools = window.__REDUX_DEVTOOLS_EXTENSION__;
     } else {
       console.log('You have not install the redux-devtools-extension.');
